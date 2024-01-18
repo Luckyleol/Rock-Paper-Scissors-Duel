@@ -25,9 +25,8 @@ public class GameManager : MonoBehaviour
     Player player1, player2;
     Dictionary<Player, bool> hasAttacked;
     Dictionary<Player, RPS> playerInput;
-    
-    // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
         playerInput = new Dictionary<Player, RPS>();
         hasAttacked = new Dictionary<Player, bool>();
@@ -38,6 +37,17 @@ public class GameManager : MonoBehaviour
         playerInput.Add(player1, RPS.fail);
         playerInput.Add(player2, RPS.fail);
         timer = 2;
+        if (playAgainstBot)
+        {
+            player2.enabled = false;
+        }
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+       
+        
     }
 
     // Update is called once per frame
@@ -48,6 +58,11 @@ public class GameManager : MonoBehaviour
         //print(timer);
         if (timer <=0&& timer>-1)
         {
+            if (playAgainstBot)
+            {
+                playerInput[player2] =(RPS)Random.Range(0, 2);
+            }
+
             print("round "+(roundCounter+1)+": " +CompareInputs());
             timer = GetRoundTime();
             roundCounter++;
