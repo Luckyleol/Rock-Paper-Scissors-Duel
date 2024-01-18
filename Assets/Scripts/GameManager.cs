@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public enum RPS
 {
@@ -12,20 +14,27 @@ public class GameManager : MonoBehaviour
     enum DuelSuccess{
         P1, P2,draw
     }
-    
+    [SerializeField]
+    TextMeshProUGUI timerText;
+    [SerializeField]
+    bool playAgainstBot;
     int player1Score, player2Score;
     float timer;
-    int roundCounter=-1;
+    int roundCounter=0;
     float startTimer;
     Player player1, player2;
+    Dictionary<Player, bool> hasAttacked;
     Dictionary<Player, RPS> playerInput;
     
     // Start is called before the first frame update
     void Start()
     {
         playerInput = new Dictionary<Player, RPS>();
+        hasAttacked = new Dictionary<Player, bool>();
         player1 = transform.GetChild(0).GetComponent<Player>();
         player2 = transform.GetChild(1).GetComponent<Player>();
+        hasAttacked.Add(player1, false);
+        hasAttacked.Add(player2, false);
         playerInput.Add(player1, RPS.fail);
         playerInput.Add(player2, RPS.fail);
         timer = 2;
@@ -37,15 +46,22 @@ public class GameManager : MonoBehaviour
 
         
         //print(timer);
-        if (timer <=0)
+        if (timer <=0&& timer>-1)
         {
-            print(CompareInputs());
+            print("round "+(roundCounter+1)+": " +CompareInputs());
+            timer = GetRoundTime();
+            roundCounter++;
+            playerInput[player1] = RPS.fail;
+            playerInput[player2] = RPS.fail;
+           
+            hasAttacked[player1] = false;
+            hasAttacked[player2] = false;
         }
-        else
+        else if( timer>0)
         {
             timer -= Time.deltaTime;
         }
-        
+        timerText.text = timer.ToString();
     }
 
     DuelSuccess CompareInputs()
@@ -89,12 +105,18 @@ public class GameManager : MonoBehaviour
     }
     public void PlayerAttack(Player player,RPS input)
     {
-        //if (timer > 0.1f)
+        if (hasAttacked[player])
+        {
+            return;
+        }
+        hasAttacked[player] = true;
+        //if (timer > 0.25f )
         //{
-        //    playerInput[player] = RPS.fail;
-        //    return;
+        //   playerInput[player] = RPS.fail;
+        //   return;
         //}
         playerInput[player] = input;
+        print(player + ":"+ input);
     }
     float GetRoundTime()
     {
@@ -121,6 +143,7 @@ public class GameManager : MonoBehaviour
             default:
                 return .25f;
         }
+       
 
     }
 

@@ -28,17 +28,17 @@ public class Player : MonoBehaviour
     void OnRock()
     {
         transform.GetComponentInParent<GameManager>().PlayerAttack(this, RPS.rock);
-        print("rock"+this.gameObject);
+        //print("rock"+this.gameObject);
     }
     void OnPaper()
     {
         transform.GetComponentInParent<GameManager>().PlayerAttack(this, RPS.paper);
-        print("paper" + this.gameObject);
+       //print("paper" + this.gameObject);
     }
 
     void OnScissors()
     {
         transform.GetComponentInParent<GameManager>().PlayerAttack(this, RPS.scissors);
-        print("scissors" + this.gameObject);
+        //print("scissors" + this.gameObject);
     }
 }
