@@ -10,11 +10,12 @@ public class Player : MonoBehaviour
     [Range(1,2)]
     int playerNumber;
     PlayerInput input;
-    
+    Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
+        rb= GetComponent<Rigidbody2D>();
         input = GetComponent<PlayerInput>();
         input.SwitchCurrentControlScheme("Player "+playerNumber, InputSystem.devices[0]);
     }
@@ -40,5 +41,10 @@ public class Player : MonoBehaviour
     {
         transform.GetComponentInParent<GameManager>().PlayerAttack(this, RPS.scissors);
         //print("scissors" + this.gameObject);
+    }
+
+    public void Lost()
+    {
+        rb.simulated = true;
     }
 }
